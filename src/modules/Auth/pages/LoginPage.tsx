@@ -1,11 +1,12 @@
 import { useState } from "react";
 import logo from "../../../logo-420-x-108.png";
-import LoginForm, { IFormLogin } from "../components/LoginForm";
-import "../pages/LoginPage.css";
+import "../pages/Auth.css";
 import http from "../../../Utils/Http";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { IFormLogin } from "../../../interfaces/ILogIn";
+import LoginForm from "../components/LoginForm";
 
 interface IResponseApi<Data> {
   message?: string;
@@ -20,20 +21,25 @@ const LoginPage = () => {
   const onLogin = async (values: IFormLogin) => {
     try {
       setLoading(true);
-      const { data, status } = await http.post<AuthResponse>(
-        "/api/auth/login",
-        values
-      );
-      // const { data, status } = await http.post<AuthResponse>("User/login", values);
-      setLoading(false);
-      if (status === 200) {
-        Cookies.set("token", data?.data?.token, {
-          expires: values.rememberMe ? 7 : undefined,
+      const dataNew = { email: values.email, password: values.password };
+      const data = http.post<any>("auth/login", dataNew);
+      data
+        .then((res: any) => {
+          const { data, code } = res.data;
+          if (code === 200) {
+            Cookies.set("token", data.token, {
+              expires: values.rememberMe ? 7 : undefined,
+            });
+          }
+          navigate("/");
+        })
+        .catch((error: any) => {
+          toast.error(error.response?.data?.message);
+          setLoading(false);
         });
-        navigate("/");
-      }
+      setLoading(false);
     } catch (error: any) {
-      toast.error(error.response?.data?.message);
+      toast.error("Best request");
       setLoading(false);
     }
   };

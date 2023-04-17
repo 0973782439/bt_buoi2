@@ -1,9 +1,7 @@
 import { useForm } from "react-hook-form";
-export interface IFormLogin {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
+import { IFormLogin } from "../../../interfaces/ILogIn";
+import { Link } from "react-router-dom";
+
 interface Props {
   onLogin: (values: IFormLogin) => void;
   loading: boolean;
@@ -118,6 +116,13 @@ const LoginForm: React.FC<Props> = ({ onLogin, loading }) => {
             )}
             Đăng nhập
           </button>
+          <Link
+            to="/Singup"
+            className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Đăng ký
+          </Link>
         </div>
       </form>
     </div>
