@@ -7,47 +7,62 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { IFormLogin } from "../../../interfaces/ILogIn";
 import LoginForm from "../components/LoginForm";
-
-interface IResponseApi<Data> {
-  message?: string;
-  data: Data;
-  status?: number;
-}
-type AuthResponse = IResponseApi<{ token: string; user: string }>;
-
+import i18next from "i18next";
+import { Language } from "../../../interfaces/ICommon";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const handleChangeLanguage = (lng: Language) => {
+    i18next.changeLanguage(lng);
+  };
   const onLogin = async (values: IFormLogin) => {
     try {
-      setLoading(true);
       const dataNew = { email: values.email, password: values.password };
       const data = http.post<any>("auth/login", dataNew);
       data
         .then((res: any) => {
           const { data, code } = res.data;
           if (code === 200) {
+            setLoading(true);
             Cookies.set("token", data.token, {
               expires: values.rememberMe ? 7 : undefined,
             });
+            setLoading(false);
           }
           navigate("/");
         })
         .catch((error: any) => {
+          setLoading(true);
           toast.error(error.response?.data?.message);
           setLoading(false);
         });
-      setLoading(false);
     } catch (error: any) {
       toast.error("Best request");
       setLoading(false);
     }
   };
   return (
-    <section id="login">
-      <img className="logo" src={logo} alt="logopowergate" />
-      <LoginForm onLogin={onLogin} loading={loading} />
-    </section>
+    <div>
+      <section className="language fixed">
+        <button
+          onClick={() => handleChangeLanguage(Language.vi)}
+          className="m-2 underline"
+        >
+          Tiếng Việt
+        </button>
+        <span>|</span>
+        <button
+          onClick={() => handleChangeLanguage(Language.en)}
+          className="m-2 underline"
+        >
+          Tiếng Anh
+        </button>
+      </section>
+      <section id="login">
+        <img className="logo" src={logo} alt="logopowergate" />
+        <LoginForm onLogin={onLogin} loading={loading} />
+      </section>
+    </div>
   );
 };
 

@@ -1,0 +1,19 @@
+{
+  "LANGUAGE": {
+    "vi": "Tiếng Việt",
+    "en": "Tiếng Anh"
+  },
+  "AUTH": {
+    "email": "Email",
+    "password": "Mật khẩu",
+    "repeatPassword": "Nhập lại mật khẩu",
+    "name": "Họ tên",
+    "gender": "Giới tính",
+    "region": "Quốc gia",
+    "state": "Thành phố",
+    "login": "Đăng nhập",
+    "singup": "Đăng ký",
+    "save_login": "Lưu thông tin đăng nhập"
+  },
+  "RULE": {}
+}

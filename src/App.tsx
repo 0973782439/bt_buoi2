@@ -5,7 +5,6 @@ import LoginPage from "./modules/Auth/pages/LoginPage";
 import Home from "./modules/Home/Home";
 import Cookies from "js-cookie";
 import Singup from "./modules/Auth/pages/SingUpPage";
-
 function RejectedRoute() {
   const auth = Cookies.get("token");
   return !auth ? <Outlet /> : <Navigate to="/" />;
@@ -20,7 +19,6 @@ function App() {
       <Route path="" element={<ProtectedRoute />}>
         <Route path="/" element={<Home />} />
       </Route>
-
       <Route path="" element={<RejectedRoute />}>
         <Route path="login" element={<LoginPage />} />
       </Route>

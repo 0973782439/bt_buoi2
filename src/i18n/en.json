@@ -1,0 +1,19 @@
+{
+  "LANGUAGE": {
+    "vi": "Tieng Viet",
+    "en": "English"
+  },
+  "AUTH": {
+    "email": "Email",
+    "password": "Password",
+    "repeatPassword": "Repeat password",
+    "name": "Name",
+    "gender": "Gender",
+    "region": "Region",
+    "state": "State",
+    "login": "Log In",
+    "singup": "Sing Up",
+    "save_login": "Save login"
+  },
+  "RULE": {}
+}

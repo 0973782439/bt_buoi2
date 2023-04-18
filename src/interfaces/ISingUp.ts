@@ -8,7 +8,7 @@ export interface ISingUp {
   state: string;
 }
 export interface IGender {
-  id: number;
+  id: string;
   value: string;
 }
 export enum Gender {

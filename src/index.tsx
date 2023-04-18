@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
+import "../src/i18n/i18n";
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
