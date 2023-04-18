@@ -15,5 +15,12 @@
     "singup": "Đăng ký",
     "save_login": "Lưu thông tin đăng nhập"
   },
-  "RULE": {}
+  "RULE": {
+    "requiredPassword": "Mật khẩu bắt buộc",
+    "maxLengthPassword": "Mật khẩu phải hơn 4 ký tự",
+    "requiredEmail": "Email bắt buộc",
+    "invalidEmail": "Email không hợp lệ",
+    "isRequired": "Thông tin bắt buộc",
+    "passwordDoNotMatch": "Không trùng với mật khẩu đã nhập"
+  }
 }

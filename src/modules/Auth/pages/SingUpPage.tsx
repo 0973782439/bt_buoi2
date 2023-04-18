@@ -7,15 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { ISingUp } from "../../../interfaces/ISingUp";
 import { toast } from "react-toastify";
 import i18next from "i18next";
+import { Language } from "../../../interfaces/ICommon";
 const Singup = () => {
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([]);
   const [state, setState] = useState([]);
   const navigate = useNavigate();
-  enum Language {
-    vi = "vi",
-    en = "en",
-  }
+
   const handleChangeLanguage = (lng: Language) => {
     i18next.changeLanguage(lng);
   };

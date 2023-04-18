@@ -4,6 +4,9 @@ import { IGender, ILocation, ISingUp } from "../../../interfaces/ISingUp";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Loading from "../../../components/Loading/Loading";
+import Input from "../../../components/Input/Input";
+import { rules as Rules } from "../../../Utils/Rules";
+import Select from "../../../components/Select/Select";
 interface Props {
   loading: boolean;
   state: Array<ILocation>;
@@ -25,9 +28,8 @@ const SingUpForm: React.FC<Props> = ({
   const { t } = useTranslation();
   const renderRegion = () => {
     const arrRegion: JSX.Element[] = [
-      <option disabled selected value={""} key={""}>
+      <option disabled selected key={""}>
         Quốc gia
-        {""}
       </option>,
     ];
     locations.map((location: ILocation, i) => {
@@ -41,9 +43,8 @@ const SingUpForm: React.FC<Props> = ({
   };
   const renderState = () => {
     const arrRegion: JSX.Element[] = [
-      <option disabled selected value={""} key={""}>
+      <option disabled selected key={""}>
         Thành phố
-        {""}
       </option>,
     ];
     state.map((location: ILocation, i) => {
@@ -57,9 +58,8 @@ const SingUpForm: React.FC<Props> = ({
   };
   const renderGender = () => {
     const arrGender: JSX.Element[] = [
-      <option disabled selected value={""} key={""}>
+      <option disabled selected key={""}>
         Giới tính
-        {""}
       </option>,
     ];
     GENDER.map((gender: IGender, i) => {
@@ -73,11 +73,13 @@ const SingUpForm: React.FC<Props> = ({
   };
 
   const {
+    getValues,
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<ISingUp>();
+  const rules = Rules(getValues);
 
   const onSubmit = (values: ISingUp) => {
     onSingup(values);
@@ -95,63 +97,67 @@ const SingUpForm: React.FC<Props> = ({
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="username"
-          >
-            {t("AUTH.email")}
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight  mb-3  focus:outline-none focus:shadow-outline"
+          <Input
+            label="AUTH.email"
+            name="email"
             id="email"
             type="text"
-            {...register("email", {
-              required: true,
-              pattern:
-                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            })}
+            className="bg-gray-50 border border-gray-300 focus:outline-none focus:shadow-outline block w-full shadow text-gray-900 text-sm rounded-lg p-2.5"
+            register={{ ...register("email", rules.email) }}
+            errorMessage={errors.email?.message}
           />
-          {errors.email && errors.email.type === "required" && (
-            <p className="text-red-500 text-xs italic">
-              Email không được bỏ trống
-            </p>
-          )}
-          {errors.email && errors.email.type === "pattern" && (
-            <p className="text-red-500 text-xs italic">
-              Email phải đúng định dạng
-            </p>
-          )}
         </div>
         <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="password"
-          >
-            {t("AUTH.password")}
-          </label>
-          <input
-            {...register("password", {
-              required: true,
-              minLength: 4,
-            })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+          <Input
+            label="AUTH.password"
             id="password"
+            name="password"
             type="password"
+            className="bg-gray-50 border border-gray-300 focus:outline-none focus:shadow-outline block w-full shadow text-gray-900 text-sm rounded-lg p-2.5"
+            register={{ ...register("password", rules.password) }}
+            errorMessage={errors.password?.message}
           />
-          {errors.password && errors.password.type === "required" && (
-            <p className="text-red-500 text-xs italic">
-              Mật khẩu không được bỏ trống
-            </p>
-          )}
-          {errors.password && errors.password.type === "minLength" && (
-            <p className="text-red-500 text-xs italic">
-              Mật khẩu tối thiểu 4 ký tự
-            </p>
-          )}
         </div>
 
         <div className="mb-6">
-          <label
+          <Input
+            label="AUTH.repeatPassword"
+            id="repeatPassword"
+            name="repeatPassword"
+            type="password"
+            className="bg-gray-50 border border-gray-300 focus:outline-none focus:shadow-outline block w-full shadow text-gray-900 text-sm rounded-lg p-2.5"
+            register={{
+              ...register(
+                "repeatPassword",
+                rules.repeatPassword
+                // {
+                //   validate: (val: string) => {
+                //     if (watch("password") != val) {
+                //       return "Mật khẩu không khớp";
+                //     }
+                //   },
+                // }
+              ),
+            }}
+            errorMessage={errors.repeatPassword?.message}
+          />
+          {/* {errors.repeatPassword &&
+            errors.repeatPassword.type === "required" && (
+              <p className="text-red-500 text-xs italic">
+                Mật khẩu không được bỏ trống
+              </p>
+            )}
+          {errors.repeatPassword &&
+            errors.repeatPassword.type === "minLength" && (
+              <p className="text-red-500 text-xs italic">
+                Mật khẩu tối thiểu 4 ký tự
+              </p>
+            )}
+          {errors.repeatPassword &&
+            errors.repeatPassword.type === "validate" && (
+              <p className="text-red-500 text-xs italic">Mật khẩu không khớp</p>
+            )} */}
+          {/* <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="repeatPassword"
           >
@@ -186,81 +192,45 @@ const SingUpForm: React.FC<Props> = ({
           {errors.repeatPassword &&
             errors.repeatPassword.type === "validate" && (
               <p className="text-red-500 text-xs italic">Mật khẩu không khớp</p>
-            )}
+            )} */}
         </div>
         <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="name"
-          >
-            Họ tên
-          </label>
-          <input
-            {...register("name", {
-              required: true,
-              minLength: 4,
-            })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+          <Input
+            label="AUTH.name"
             id="name"
-            type="name"
+            name="name"
+            type="text"
+            className="bg-gray-50 border border-gray-300 focus:outline-none focus:shadow-outline block w-full shadow text-gray-900 text-sm rounded-lg p-2.5"
+            register={{ ...register("name", rules.isRequired) }}
+            errorMessage={errors.name?.message}
           />
-          {errors.name && errors.name.type === "required" && (
-            <p className="text-red-500 text-xs italic">
-              Họ tên không được bỏ trống
-            </p>
-          )}
-          {errors.name && errors.name.type === "minLength" && (
-            <p className="text-red-500 text-xs italic">
-              Họ tên tối thiểu 4 ký tự
-            </p>
-          )}
         </div>
         <div className="mb-6">
-          <label
-            htmlFor="gender"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Giới tính
-          </label>
-
-          <select
-            {...register("gender")}
+          <Select
+            register={{ ...register("gender") }}
             id="gender"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            label="AUTH.gender"
           >
             {renderGender()}
-          </select>
+          </Select>
         </div>
         <div className="mb-6">
-          <label
-            htmlFor="countries"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Quốc gia
-          </label>
-          <select
-            {...register("region")}
+          <Select
+            register={{ ...register("region") }}
             id="region"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            label="AUTH.region"
           >
             {renderRegion()}
-          </select>
+          </Select>
         </div>
         <div className="mb-6">
-          <label
-            htmlFor="state"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Thành phố
-          </label>
-
-          <select
-            {...register("state")}
+          <Select
+            register={{ ...register("state") }}
             id="state"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            label="AUTH.state"
           >
             {renderState()}
-          </select>
+          </Select>
         </div>
         <div className="flex justify-center gap-3">
           <button

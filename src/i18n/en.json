@@ -15,5 +15,12 @@
     "singup": "Sing Up",
     "save_login": "Save login"
   },
-  "RULE": {}
+  "RULE": {
+    "requiredPassword": "Password required",
+    "maxLengthPassword": "Password length from 5-10 characters",
+    "requiredEmail": "Email required",
+    "invalidEmail": "Email invalid",
+    "isRequired": "Is required",
+    "passwordDoNotMatch": "Does not match the entered password"
+  }
 }
