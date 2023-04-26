@@ -1,30 +1,47 @@
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import { Routes, Route, Outlet, Navigate } from "react-router-dom";
-import LoginPage from "./modules/Auth/pages/LoginPage";
-import Home from "./modules/Home/Home";
-import Cookies from "js-cookie";
-import Singup from "./modules/Auth/pages/SingUpPage";
-function RejectedRoute() {
-  const auth = Cookies.get("token");
-  return !auth ? <Outlet /> : <Navigate to="/" />;
-}
-function ProtectedRoute() {
-  const auth = Cookies.get("token");
-  return auth ? <Outlet /> : <Navigate to="login" />;
-}
+import { Routes, Route } from "react-router-dom";
+import { routersPublic } from "./routers/Router";
+// function RejectedRoute() {
+//   const auth = Cookies.get("token");
+//   return !auth ? <Outlet /> : <Navigate to="/" />;
+// }
+// function ProtectedRoute() {
+//   const auth = Cookies.get("token");
+//   return auth ? <Outlet /> : <Navigate to="login" />;
+// }
 function App() {
   return (
+    // <Routes>
+    //   <Route path="" element={<ProtectedRoute />}>
+    //     <Route path="/" element={<Home />} />
+    //   </Route>
+    //   <Route path="" element={<RejectedRoute />}>
+    //     <Route path="login" element={<LoginPage />} />
+    //   </Route>
+    //   <Route path="" element={<RejectedRoute />}>
+    //     <Route path="singup" element={<Singup />} />
+    //   </Route>
+    // </Routes>
     <Routes>
-      <Route path="" element={<ProtectedRoute />}>
-        <Route path="/" element={<Home />} />
-      </Route>
-      <Route path="" element={<RejectedRoute />}>
-        <Route path="login" element={<LoginPage />} />
-      </Route>
-      <Route path="" element={<RejectedRoute />}>
-        <Route path="singup" element={<Singup />} />
-      </Route>
+      {routersPublic.map((router, indx) => {
+        return (
+          <Route
+            key={indx}
+            path={router.path}
+            element={router.element}
+            children={router.children?.map((children, ind) => {
+              return (
+                <Route
+                  key={ind}
+                  path={children.path}
+                  element={children.element}
+                />
+              );
+            })}
+          ></Route>
+        );
+      })}
     </Routes>
   );
 }

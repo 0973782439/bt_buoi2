@@ -5,7 +5,7 @@ export interface ISingUp {
   name: string;
   gender: Gender;
   region: number;
-  state: string;
+  state: number;
 }
 export interface IGender {
   id: string;

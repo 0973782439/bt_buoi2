@@ -2,33 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IGender, ILocation, ISingUp } from "../../../interfaces/ISingUp";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import Loading from "../../../components/Loading/Loading";
 import Input from "../../../components/Input/Input";
 import { rules as Rules } from "../../../Utils/Rules";
 import Select from "../../../components/Select/Select";
+import { useAppSelector } from "../../../app/hooks";
+import { RootState } from "../../../app/store";
+import { GENDER } from "../../../Utils/Common";
 interface Props {
-  loading: boolean;
   state: Array<ILocation>;
   locations: Array<ILocation>;
   onSingup: (values: ISingUp) => void;
   handleSelectedRegion: (idRegion: number) => void;
 }
-const GENDER = [
-  { id: "male", value: "Nam" },
-  { id: "female", value: "Nữ" },
-];
+
 const SingUpForm: React.FC<Props> = ({
-  loading,
   locations,
   onSingup,
   handleSelectedRegion,
   state,
 }) => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
+  const isLoading = useAppSelector(
+    (state: RootState) => state.common.isLoading
+  );
   const renderRegion = () => {
     const arrRegion: JSX.Element[] = [
-      <option disabled selected key={""}>
+      <option disabled value={""} key={""}>
         Quốc gia
       </option>,
     ];
@@ -43,7 +43,7 @@ const SingUpForm: React.FC<Props> = ({
   };
   const renderState = () => {
     const arrRegion: JSX.Element[] = [
-      <option disabled selected key={""}>
+      <option disabled value={""} key={""}>
         Thành phố
       </option>,
     ];
@@ -58,7 +58,7 @@ const SingUpForm: React.FC<Props> = ({
   };
   const renderGender = () => {
     const arrGender: JSX.Element[] = [
-      <option disabled selected key={""}>
+      <option value={""} key={""}>
         Giới tính
       </option>,
     ];
@@ -127,72 +127,10 @@ const SingUpForm: React.FC<Props> = ({
             type="password"
             className="bg-gray-50 border border-gray-300 focus:outline-none focus:shadow-outline block w-full shadow text-gray-900 text-sm rounded-lg p-2.5"
             register={{
-              ...register(
-                "repeatPassword",
-                rules.repeatPassword
-                // {
-                //   validate: (val: string) => {
-                //     if (watch("password") != val) {
-                //       return "Mật khẩu không khớp";
-                //     }
-                //   },
-                // }
-              ),
+              ...register("repeatPassword", rules.repeatPassword),
             }}
             errorMessage={errors.repeatPassword?.message}
           />
-          {/* {errors.repeatPassword &&
-            errors.repeatPassword.type === "required" && (
-              <p className="text-red-500 text-xs italic">
-                Mật khẩu không được bỏ trống
-              </p>
-            )}
-          {errors.repeatPassword &&
-            errors.repeatPassword.type === "minLength" && (
-              <p className="text-red-500 text-xs italic">
-                Mật khẩu tối thiểu 4 ký tự
-              </p>
-            )}
-          {errors.repeatPassword &&
-            errors.repeatPassword.type === "validate" && (
-              <p className="text-red-500 text-xs italic">Mật khẩu không khớp</p>
-            )} */}
-          {/* <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="repeatPassword"
-          >
-            Nhập lại mật khẩu
-          </label>
-          <input
-            {...register("repeatPassword", {
-              required: true,
-              minLength: 4,
-              validate: (val: string) => {
-                if (watch("password") != val) {
-                  return "Mật khẩu không khớp";
-                }
-              },
-            })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            id="repeatPassword"
-            type="password"
-          />
-          {errors.repeatPassword &&
-            errors.repeatPassword.type === "required" && (
-              <p className="text-red-500 text-xs italic">
-                Mật khẩu không được bỏ trống
-              </p>
-            )}
-          {errors.repeatPassword &&
-            errors.repeatPassword.type === "minLength" && (
-              <p className="text-red-500 text-xs italic">
-                Mật khẩu tối thiểu 4 ký tự
-              </p>
-            )}
-          {errors.repeatPassword &&
-            errors.repeatPassword.type === "validate" && (
-              <p className="text-red-500 text-xs italic">Mật khẩu không khớp</p>
-            )} */}
         </div>
         <div className="mb-6">
           <Input
@@ -207,6 +145,7 @@ const SingUpForm: React.FC<Props> = ({
         </div>
         <div className="mb-6">
           <Select
+            value=""
             register={{ ...register("gender") }}
             id="gender"
             label="AUTH.gender"
@@ -216,6 +155,7 @@ const SingUpForm: React.FC<Props> = ({
         </div>
         <div className="mb-6">
           <Select
+            value=""
             register={{ ...register("region") }}
             id="region"
             label="AUTH.region"
@@ -225,6 +165,7 @@ const SingUpForm: React.FC<Props> = ({
         </div>
         <div className="mb-6">
           <Select
+            value=""
             register={{ ...register("state") }}
             id="state"
             label="AUTH.state"
@@ -236,9 +177,9 @@ const SingUpForm: React.FC<Props> = ({
           <button
             className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
-            disabled={loading}
+            disabled={isLoading}
           >
-            {loading && <Loading />}
+            <Loading />
             Đăng ký
           </button>
           <Link

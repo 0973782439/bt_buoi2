@@ -6,22 +6,25 @@ import Loading from "../../../components/Loading/Loading";
 import Input from "../../../components/Input/Input";
 import { rules as Rules } from "../../../Utils/Rules";
 import Checkbox from "../../../components/Checkbox/Checkbox";
+import { useAppSelector } from "../../../app/hooks";
+import { RootState } from "../../../app/store";
 
 interface Props {
   onLogin: (values: IFormLogin) => void;
-  loading: boolean;
 }
 
-const LoginForm: React.FC<Props> = ({ onLogin, loading }) => {
+const LoginForm: React.FC<Props> = ({ onLogin }) => {
+  const isLoading = useAppSelector(
+    (state: RootState) => state.common.isLoading
+  );
   const { t } = useTranslation();
+  const rules = Rules();
 
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm<IFormLogin>();
-  const rules = Rules(getValues);
 
   const onSubmit = (values: IFormLogin) => {
     onLogin(values);
@@ -65,9 +68,9 @@ const LoginForm: React.FC<Props> = ({ onLogin, loading }) => {
           <button
             className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
-            disabled={loading}
+            disabled={isLoading}
           >
-            {loading && <Loading />}
+            <Loading />
             {t("AUTH.login")}
           </button>
           <Link
